@@ -132,7 +132,7 @@ echo echo Lunching for $TARGET_PRODUCT >>build.sh
 echo lunch 4 >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
-echo mka bacon -i >>build.sh
+echo mka xmc -i >>build.sh
 chmod +x build.sh
 ./build.sh
 rm build.sh
