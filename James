@@ -69,13 +69,19 @@ echo Hello, my name is James! Nice to meet you $user
 echo ==========================
 echo It is $date
 echo
-read -p "Press 1 if building a Nightly
-Press 2 if building an Official release
-" 12
-    case $12 in
-        [1]* ) clear; echo cleaning...; buildtype=Nightly;  upload=ftp://xmcwildchild22:$pass@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_$out_date.zip;;
-        [2]* ) clear; buildtype=Stable; upload=ftp://xmcwildchild22:$pass@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v$ver.zip;;
-    esac
+echo  Press 1 if building a Nightly
+echo  Press 2 if building an Official release
+read -p "Please select your choice (1/2) " type
+if [ "$type" = "1" ]; then
+  clear 
+  buildtype=Nightly  
+  upload=ftp://xmcwildchild22:$pass@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_$out_date.zip
+fi
+if [ "$type" = "2" ]; then
+  clear 
+  buildtype=Stable 
+  upload=ftp://xmcwildchild22:$pass@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v$ver.zip
+fi
 read -p "Press [Enter] to prepare the build enviroment "
 clear
 read -p "Do you wish to sync the repo and update trees first? [y or n] " yn
@@ -144,4 +150,3 @@ wget -q $url
 rm pass.sh
 wput -v $TARGET_PRODUCT-ota-eng.$user.zip $upload  
 echo Done
-
