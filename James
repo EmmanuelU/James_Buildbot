@@ -2,7 +2,7 @@
 sleep 3
 echo James v$version was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
-ver=0.8
+ver=0.9
 date=$(date)
 os=$(uname)
 user=$(whoami)
@@ -75,12 +75,12 @@ read -p "Please select your choice (1/2) " type
 if [ "$type" = "1" ]; then
   clear 
   buildtype=Nightly  
-  upload=ftp://xmcwildchild22:$pass@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_$outdate.zip
+  upload=ftp://xmcwildchild22:edude152@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_$outdate.zip
 fi
 if [ "$type" = "2" ]; then
   clear 
   buildtype=Stable 
-  upload=ftp://xmcwildchild22:$pass@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v$ver.zip
+  upload=ftp://xmcwildchild22:edude152@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v$ver.zip
 fi
 read -p "Press [Enter] to prepare the build enviroment "
 clear
