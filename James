@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ../../
 sleep 3
 echo James v$version was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
