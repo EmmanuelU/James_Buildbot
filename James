@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ../../
 sleep 3
 echo James v$version was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
@@ -147,7 +146,19 @@ sleep 5
 echo Uploading to server...
 cd out/target/product/doubleshot
 wget -q $url
+chmod a+x pass.sh
 . pass.sh
 rm pass.sh
+if [ $user != $admin ] ; then
+ 
+        echo "You don't have rights to upload builds to the server"
+		echo "Done - Did not Upload"
+			sleep 5
+				exit
+fi
+echo Hello Admin, uploading $buildtype to $upload
+echo -----------------------------------------------
+echo
 wput -v $TARGET_PRODUCT-ota-eng.$user.zip $upload  
-echo Done
+echo 
+echo Done - Uploaded to 
