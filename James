@@ -25,7 +25,7 @@ do
     case "$opt" in
         c) clean=true
 	   command=1
-	   echo clean=true >>
+	   echo clean=true >>james-build-log.txt
         ;;
 
         a) if [ $user != $admin ] ; then
@@ -33,6 +33,7 @@ do
 	exit 1
 	   fi
         admin=true
+        echo admin=true >>james-build-log.txt
         command=1
         ;;
 
@@ -42,6 +43,7 @@ do
 	echo Make a file called upload.txt and add this to the top:
         echo [youruploadurl] 
 	echo   eg: ftp://name:pass@upload.goo.im/public_html/out.zip
+        echo upload=true >>james-build-log.txt
 	echo
         exit 1
 fi
