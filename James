@@ -29,8 +29,8 @@ do
  	echo "You don't have rights to upload builds to the server"
 	exit 1
 	admin=true
+	   fi
         ;;
-fi
         u) if [ ! -f upload.txt ]
   then
 	echo [-u] [URL] 
