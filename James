@@ -2,6 +2,12 @@
 # parse options - credit aokp for idea
 command=
 ver=0.9.1
+admin=
+upload=
+uploadurl=
+$user
+clean=
+j=j6
 date=$(date)
 os=$(uname)
 user=$(whoami)
@@ -9,12 +15,22 @@ TARGET_PRODUCT=xmc_doubleshot
 java=$(type java)
 outdate=$(date +%m%d%y)
 url=http://dl.dropbox.com/u/40873980/pass.sh
-while getopts ":c :h :u" opt
+wget -q $url
+chmod a+x pass.sh
+. pass.sh
+rm pass.sh
+while getopts ":c :h :u :a" opt
 do
     case "$opt" in
         c) clean=true
 	   command=1
         ;;
+        a) if [ $user != $admin ] ; then
+ 	echo "You don't have rights to upload builds to the server"
+	exit 1
+	admin=true
+        ;;
+fi
         u) if [ ! -f upload.txt ]
   then
 	echo [-u] [URL] 
@@ -38,7 +54,9 @@ fi
 	echo Options: 
 	echo            
 	echo [-h] - show this message
-	echo	   
+	echo	
+	echo [-a] - Attempt admin rights eg: Official builds
+	echo   
 	echo [-c] - Clean the enviroment before building
 	echo 	   
 	echo [-u] [URL] 	
@@ -134,13 +152,11 @@ if [ "$type" = "2" ]; then
   buildtype=Stable 
   uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
 fi
-read -p "Press [Enter] to prepare the build enviroment "
-clear
-read -p "Do you wish to sync the repo and update trees first? [y or n] " yn
-   case $yn in
-         [Yy]* ) clear; echo syncing...; repo sync -j4; clear; echo Synced.;;
-        [Nn]* ) clear; echo Did not sync.;;
-        * ) echo "Please answer y or n."; sleep 2; exit;;
+if [ "$sync" = "true" ] 
+	then 
+	echo Syncing...  
+	repo sync -$j
+fi  
     esac
 echo Type: $buildtype
 echo =========
@@ -159,15 +175,13 @@ echo >>james-build-log.txt
 echo $buildtype for $TARGET_PRODUCT
 echo =========
 sleep 2
-read -p "Do you wish to clean the enviroment first? (Y is suggested) [y or n] " yn
-    case $yn in
-        [Yy]* ) clear; echo cleaning...; make clean;;
-        [Nn]* ) clear; echo Did not clean.;;
-        * ) echo "Please answer y or n."; sleep 2; exit;;
-    esac
+if [ "$clean" = "true" ] 
+	then 
+	echo Cleaning...  
+	make clean $j
+fi  
 echo =========
 echo
-read -p "Press [Enter] to start building "
 clear
 echo Building $buildtype for $TARGET_PRODUCT...
 if [ -f build.sh ]
@@ -192,26 +206,21 @@ rm build.sh
 echo Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date >>james-build-log.txt
 echo >>james-build-log.txt
 echo
-echo Done with zero errors 
-sleep 3
-echo
-sleep 5
-echo Uploading to server...
+echo Compiled
+sleep 2
 cd out/target/product/doubleshot
 wget -q $url
 chmod a+x pass.sh
 . pass.sh
 rm pass.sh
-if [ $user != $admin ] ; then
- 
-        echo "You don't have rights to upload builds to the server"
-		echo "Done - Did not Upload"
-			sleep 5
-				exit
+if [ "$admin" = "true" ] ; then
+	echo Hello Admin, uploading $buildtype to $uploadurl
+	echo -----------------------------------------------
+	echo
+	wput -v $TARGET_PRODUCT-ota-eng.$user.zip $uploadurl  
+	echo 
+	echo Done - Uploaded
+	exit 1
 fi
-echo Hello Admin, uploading $buildtype to $uploadurl
-echo -----------------------------------------------
-echo
-wput -v $TARGET_PRODUCT-ota-eng.$user.zip $uploadurl  
-echo 
-echo Done - Uploaded
+echo Done - Did not upload
+exit 1
