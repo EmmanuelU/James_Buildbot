@@ -91,12 +91,24 @@ fi
              exit 1
         ;;
 
-        n)   buildtype=Nightly  
-  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
+        n)
+	if [ "$buildtype" = "Stable" ] ; then
+	echo You cannot use -n and -s together.
+	echo "invalid option: -$OPTARG"
+	exit 1
+	fi    
+	buildtype=Nightly  
+	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
         ;;
 
-        s)   buildtype=Stable 
-  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
+        s)
+	if [ "$buildtype" = "Nightly" ] ; then
+	echo You cannot use -n and -s together.
+	echo "invalid option: -$OPTARG"
+	exit 1
+	fi    
+	buildtype=Stable 
+	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
         ;;
     esac
 done
