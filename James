@@ -99,6 +99,7 @@ fi
 	echo "invalid option: -$OPTARG"
 	exit 1
 	fi    
+	command=1
 	buildtype=Nightly
 	echo buildtype=$buildtype >>james-build-log.txt 
 	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
@@ -110,6 +111,7 @@ fi
 	echo "invalid option: -$OPTARG"
 	exit 1
 	fi    
+	command=1
 	buildtype=Stable 
 	echo buildtype=$buildtype >>james-build-log.txt 
 	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
@@ -186,7 +188,6 @@ if [ "$sync" = "true" ]
 	echo Syncing...  
 	repo sync -$j
 fi  
-    esac
 echo Type: $buildtype
 echo =========
 echo Setting up build enviroment...
