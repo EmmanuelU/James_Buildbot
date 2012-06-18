@@ -1,6 +1,11 @@
 #!/bin/bash
 # parse options - credit aokp for idea
 clear
+if [ -f james-build-log.txt ]
+  then
+    echo "Previous log exists, deleting..."
+    	rm james-build-log.txt
+fi
 command=
 ver=0.9.1
 admin=
@@ -16,6 +21,8 @@ TARGET_PRODUCT=xmc_doubleshot
 java=$(type java)
 outdate=$(date +%m%d%y)
 url=http://dl.dropbox.com/u/40873980/pass.sh
+echo James v$ver was started --BEGIN LOG >>james-build-log.txt
+echo  >>james-build-log.txt
 wget -q $url
 chmod a+x pass.sh
 . pass.sh
@@ -99,8 +106,6 @@ if [ "$command" = "" ]
 	echo Usage: ./James -[OPTION] or use ./James -h for help
 	exit -1
 fi  
-echo James v$version was started --BEGIN LOG >>james-build-log.txt
-echo  >>james-build-log.txt
 clear
 echo Running Start-up checks.
 sleep 1
@@ -144,12 +149,6 @@ echo $java
 java -version
 sleep 3
 clear
-
-if [ -f james-build-log.txt ]
-  then
-    echo "Previous log exists, deleting..."
-    	rm james-build-log.txt
-fi
 sleep 2
 clear
 echo Passed startup checks! >>james-build-log.txt
