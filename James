@@ -5,11 +5,13 @@ if [ -f james-build-log.txt ]
   then
     echo "Previous log exists, deleting..."
     	rm james-build-log.txt
+clear
 fi
 command=
 ver=0.9.1
 admin=
 upload=
+buildtype=
 uploadurl=
 $user
 clean=
@@ -97,7 +99,8 @@ fi
 	echo "invalid option: -$OPTARG"
 	exit 1
 	fi    
-	buildtype=Nightly  
+	buildtype=Nightly
+	echo buildtype=$buildtype >>james-build-log.txt 
 	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
         ;;
 
@@ -108,6 +111,7 @@ fi
 	exit 1
 	fi    
 	buildtype=Stable 
+	echo buildtype=$buildtype >>james-build-log.txt 
 	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
         ;;
     esac
@@ -116,6 +120,12 @@ if [ "$command" = "" ]
 	then 
         echo "invalid option: -$OPTARG"
 	echo Usage: ./James -[OPTION] or use ./James -h for help
+	exit -1
+fi
+if [ "$buildtype" = "" ] 
+	then 
+        echo "You must specify a buildtype"
+	echo Use [-n] for Nightly or [-s] for Stable
 	exit -1
 fi  
 clear
