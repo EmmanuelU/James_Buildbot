@@ -20,7 +20,7 @@ wget -q $url
 chmod a+x pass.sh
 . pass.sh
 rm pass.sh
-while getopts ":c :h :u :a" opt
+while getopts ":c :h :u :a :n :s" opt
 do
     case "$opt" in
         c) clean=true
@@ -61,7 +61,11 @@ fi
 	echo          
 	echo Options: 
 	echo            
-	echo [-h] - show this message
+	echo [-h] - Show this message
+	echo	
+	echo [-n] - Build a Nightly
+	echo	
+	echo [-s] - Build a Stable
 	echo	
 	echo [-a] - Attempt admin rights eg: Official builds
 	echo   
@@ -78,6 +82,14 @@ fi
         \?)
              echo "invalid option: -$OPTARG"
              exit 1
+        ;;
+
+        n)   buildtype=Nightly  
+  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
+        ;;
+
+        s)   buildtype=Stable 
+  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
         ;;
     esac
 done
@@ -148,19 +160,6 @@ echo Hello, my name is James! Nice to meet you $user
 echo ==========================
 echo It is $date
 echo
-echo  Press 1 if building a Nightly
-echo  Press 2 if building an Official release
-read -p "Please select your choice (1/2) " type
-if [ "$type" = "1" ]; then
-  clear 
-  buildtype=Nightly  
-  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
-fi
-if [ "$type" = "2" ]; then
-  clear 
-  buildtype=Stable 
-  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
-fi
 if [ "$sync" = "true" ] 
 	then 
 	echo Syncing...  
