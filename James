@@ -1,8 +1,7 @@
 #!/bin/bash
-sleep 3
-echo James v$version was started --BEGIN LOG >>james-build-log.txt
-echo  >>james-build-log.txt
-ver=0.9
+# parse options - credit aokp for idea
+command=
+ver=0.9.1
 date=$(date)
 os=$(uname)
 user=$(whoami)
@@ -10,6 +9,59 @@ TARGET_PRODUCT=xmc_doubleshot
 java=$(type java)
 outdate=$(date +%m%d%y)
 url=http://dl.dropbox.com/u/40873980/pass.sh
+while getopts ":c :h :u" opt
+do
+    case "$opt" in
+        c) clean=true
+	   command=1
+        ;;
+        u) if [ ! -f upload.txt ]
+  then
+	echo [-u] [URL] 
+	echo Make a file called upload.txt and add this to the top:
+        echo [youruploadurl] 
+	echo   eg: ftp://name:pass@upload.goo.im/public_html/out.zip
+	echo
+        exit 1
+fi
+           upload=true
+           uploadurl=
+	   uploadurl=$(head -n 1 upload.txt)
+           echo uploading to $uploadurl
+           sleep 2
+	   command=1	
+        ;;
+        h) echo ===James-Builder-v$ver===
+        echo
+	echo Usage: ./James -[OPTION]
+	echo          
+	echo Options: 
+	echo            
+	echo [-h] - show this message
+	echo	   
+	echo [-c] - Clean the enviroment before building
+	echo 	   
+	echo [-u] [URL] 	
+        echo Make a file called upload.txt and add this to the top:
+        echo [youruploadurl] 
+	echo   eg: ftp://name:pass@upload.goo.im/public_html/out.zip
+	echo           
+	exit 1	
+        ;;
+        \?)
+             echo "invalid option: -$OPTARG"
+             exit 1
+        ;;
+    esac
+done
+if [ "$command" = "" ] 
+	then 
+        echo "invalid option: -$OPTARG"
+	echo Usage: ./James -[OPTION] or use ./James -h for help
+	exit -1
+fi  
+echo James v$version was started --BEGIN LOG >>james-build-log.txt
+echo  >>james-build-log.txt
 clear
 echo Running Start-up checks.
 sleep 1
@@ -63,7 +115,7 @@ sleep 2
 clear
 echo Passed startup checks! >>james-build-log.txt
 echo  >>james-build-log.txt
-echo ===WildchildIcE-Builder-v$ver===
+echo ===James-Builder-v$ver===
 echo 
 echo Hello, my name is James! Nice to meet you $user
 echo ==========================
@@ -75,12 +127,12 @@ read -p "Please select your choice (1/2) " type
 if [ "$type" = "1" ]; then
   clear 
   buildtype=Nightly  
-  upload=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
+  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
 fi
 if [ "$type" = "2" ]; then
   clear 
   buildtype=Stable 
-  upload=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
+  uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
 fi
 read -p "Press [Enter] to prepare the build enviroment "
 clear
@@ -157,9 +209,9 @@ if [ $user != $admin ] ; then
 			sleep 5
 				exit
 fi
-echo Hello Admin, uploading $buildtype to $upload
+echo Hello Admin, uploading $buildtype to $uploadurl
 echo -----------------------------------------------
 echo
-wput -v $TARGET_PRODUCT-ota-eng.$user.zip $upload  
+wput -v $TARGET_PRODUCT-ota-eng.$user.zip $uploadurl  
 echo 
 echo Done - Uploaded
