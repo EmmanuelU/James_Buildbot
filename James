@@ -81,6 +81,8 @@ fi
 	echo	
 	echo [-r] - Build a Release
 	echo	
+	echo [-s] - Sync the repo before building
+	echo	
 	echo [-a] - Attempt admin rights eg: Official builds
 	echo   
 	echo [-c] - Clean the enviroment before building
