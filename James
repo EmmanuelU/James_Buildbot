@@ -29,12 +29,17 @@ wget -q $url
 chmod a+x pass.sh
 . pass.sh
 rm pass.sh
-while getopts ":c :h :u :a :n :s" opt
+while getopts ":c :h :s :u :a :n :r" opt
 do
     case "$opt" in
         c) clean=true
 	   command=1
 	   echo clean=true >>james-build-log.txt
+        ;;
+
+        s) sync=true
+	   command=1
+	   echo sync=true >>james-build-log.txt
         ;;
 
         a) if [ $user != $admin ] ; then
@@ -74,7 +79,7 @@ fi
 	echo	
 	echo [-n] - Build a Nightly
 	echo	
-	echo [-s] - Build a Stable
+	echo [-r] - Build a Release
 	echo	
 	echo [-a] - Attempt admin rights eg: Official builds
 	echo   
@@ -95,7 +100,7 @@ fi
 
         n)
 	if [ "$buildtype" = "Stable" ] ; then
-	echo You cannot use -n and -s together.
+	echo You cannot use -n and -r together.
 	echo "invalid option: -$OPTARG"
 	exit 1
 	fi    
@@ -107,7 +112,7 @@ fi
 
         s)
 	if [ "$buildtype" = "Nightly" ] ; then
-	echo You cannot use -n and -s together.
+	echo You cannot use -n and -r together.
 	echo "invalid option: -$OPTARG"
 	exit 1
 	fi    
