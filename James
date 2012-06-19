@@ -213,7 +213,7 @@ sleep 2
 if [ "$clean" = "true" ] 
 	then 
 	echo Cleaning...  
-	rm -rf out
+	make clean -$j
 fi  
 echo =========
 echo
