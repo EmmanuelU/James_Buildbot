@@ -10,10 +10,10 @@ fi
 command=
 ver=1.0
 admin=
+adminup=
 upload=
 buildtype=
 uploadurl=
-$user
 clean=
 j=j6
 date=$(date)
@@ -46,7 +46,7 @@ do
  	echo "You don't have rights to upload builds to the server"
 	exit 1
 	   fi
-        admin=true
+        adminup=true
         echo admin=true >>james-build-log.txt
         command=1
         ;;
@@ -247,10 +247,7 @@ echo Compiled
 sleep 2
 cd out/target/product/doubleshot
 wget -q $url
-chmod a+x pass.sh
-. pass.sh
-rm pass.sh
-if [ "$admin" = "true" ] 
+if [ "$adminup" = "true" ] 
 	then
 	echo Hello Admin, uploading $buildtype to $uploadurl
 	echo -----------------------------------------------
