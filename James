@@ -42,7 +42,7 @@ do
 	   echo sync=true >>james-build-log.txt
         ;;
 
-        a) if [ $user != $admin ] ; then
+        a) if [ ! $user = $admin ] ; then
  	echo "You don't have rights to upload builds to the server"
 	exit 1
 	   fi
@@ -250,7 +250,8 @@ wget -q $url
 chmod a+x pass.sh
 . pass.sh
 rm pass.sh
-if [ "$admin" = "true" ] ; then
+if [ "$admin" = "true" ] 
+	then
 	echo Hello Admin, uploading $buildtype to $uploadurl
 	echo -----------------------------------------------
 	echo
