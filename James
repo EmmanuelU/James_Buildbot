@@ -246,7 +246,6 @@ echo
 echo Compiled
 sleep 2
 cd out/target/product/doubleshot
-wget -q $url
 if [ "$adminup" = "true" ] 
 	then
 	echo Hello Admin, uploading $buildtype to $uploadurl
