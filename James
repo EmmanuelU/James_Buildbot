@@ -232,7 +232,7 @@ echo echo >>build.sh
 echo echo Found trees >>build.sh
 echo echo >>build.sh
 echo echo Lunching for $TARGET_PRODUCT >>build.sh
-echo lunch 4 >>build.sh
+echo lunch xmc_doubleshot-userdebug >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
 echo mka xmc -i >>build.sh
