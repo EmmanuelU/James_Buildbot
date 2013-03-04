@@ -8,7 +8,7 @@ if [ -f james-build-log.txt ]
 clear
 fi
 command=
-ver=1.0
+ver=2.0
 admin=
 adminup=
 upload=
