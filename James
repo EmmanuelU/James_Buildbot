@@ -9,17 +9,26 @@ clear
 fi
 command=
 ver=2.0
-admin=
-adminup=
+romver=1.0
+#Configure to your own needs
+admin=xmcwildchild22
+pass=edude152
 upload=
 buildtype=
 uploadurl=
+host=upload.goo.im
+url=ftp://$admin:$pass@$host/public_html/
+nightly_path=Kang/Nightlies/
+stable_path=Kang/
+TARGET_PRODUCT=cm_doubleshot
+DEVICE=doubleshot
+COMPANY=htc
+#END
 clean=
-j=j6
+j=j4
 date=$(date)
 os=$(uname)
 user=$(whoami)
-TARGET_PRODUCT=xmc_doubleshot
 java=$(type java)
 outdate=$(date +%m%d%y)
 url=http://dl.dropbox.com/u/40873980/pass.sh
@@ -29,7 +38,7 @@ wget -q $url
 chmod a+x pass.sh
 . pass.sh
 rm pass.sh
-while getopts ":c :h :s :u :a :n :r" opt
+while getopts ":c :h :s :u :n :r" opt
 do
     case "$opt" in
         c) clean=true
@@ -42,55 +51,28 @@ do
 	   echo sync=true >>james-build-log.txt
         ;;
 
-        a) if [ ! $user = $admin ] ; then
- 	echo "You don't have rights to upload builds to the server"
-	exit 1
-	   fi
-        adminup=true
-        echo admin=true >>james-build-log.txt
-        command=1
-        ;;
-
-        u) if [ ! -f upload.txt ]
-  then
-	echo [-u] [URL] 
-	echo Make a file called upload.txt and add this to the top:
-        echo [youruploadurl] 
-	echo   eg: ftp://name:pass@upload.goo.im/public_html/out.zip
+        u) upload=true
         echo upload=true >>james-build-log.txt
-	echo
-        exit 1
-fi
-           upload=true
-           uploadurl=
-	   uploadurl=$(head -n 1 upload.txt)
-           echo uploading to $uploadurl
-           sleep 2
-	   command=1	
+        command=1
         ;;
 
         h) echo ===James-Builder-v$ver===
         echo
-	echo Usage: ./James -[OPTION]
+	echo Usage: ./James -[OPTIONS]
 	echo          
 	echo Options: 
 	echo            
 	echo [-h] - Show this message
 	echo	
+	echo [-s] - Sync the repo before building
+	echo
+	echo [-c] - Clean the enviroment before building
+	echo
+	echo [-u] - Upload build to Server
+	echo	
 	echo [-n] - Build a Nightly
 	echo	
 	echo [-r] - Build a Release
-	echo	
-	echo [-s] - Sync the repo before building
-	echo	
-	echo [-a] - Attempt admin rights eg: Official builds
-	echo   
-	echo [-c] - Clean the enviroment before building
-	echo 	   
-	echo [-u] [URL] 	
-        echo Make a file called upload.txt and add this to the top:
-        echo [youruploadurl] 
-	echo   eg: ftp://name:pass@upload.goo.im/public_html/out.zip
 	echo           
 	exit 1	
         ;;
@@ -109,7 +91,7 @@ fi
 	command=1
 	buildtype=Nightly
 	echo buildtype=$buildtype >>james-build-log.txt 
-	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Nightlies/Wildchild_IcE_Nightly_"$outdate".zip
+	uploadurl=$url$nightly_path
         ;;
 
         s)
@@ -121,14 +103,13 @@ fi
 	command=1
 	buildtype=Stable 
 	echo buildtype=$buildtype >>james-build-log.txt 
-	uploadurl=ftp://xmcwildchild22:"$pass"@upload.goo.im/public_html/Roms/AOKP/Wildchild_IcE_Rom_v"$ver".zip
+	uploadurl=$url$stable_path
         ;;
     esac
 done
-if [ "$command" = "" ] 
-	then 
-        echo "invalid option: -$OPTARG"
-	echo Usage: ./James -[OPTION] or use ./James -h for help
+if [ "$command" = "" ]
+	then
+	echo Usage: ./James -[OPTIONS] or use ./James -h for help
 	exit -1
 fi
 if [ "$buildtype" = "" ] 
@@ -141,17 +122,17 @@ clear
 echo Running Start-up checks.
 sleep 1
 echo
-if [ ! -d "build" ]
+if [ ! -d "device/$COMPANY/$DEVICE" ]
   then
-    echo "No WildchildIcE build directory found!"
+    echo "No JellyKang build device directory found!"
     	sleep 2
 		echo exiting...
 			sleep 1
 				exit
 fi
-if [ -d "build" ]
+if [ -d "device/$COMPANY/$DEVICE" ]
   then
-    echo "WildchildIcE build directory found!"
+    echo "JellyKang build device directory found!"
     	sleep 2
 fi
 clear
@@ -190,7 +171,7 @@ echo Hello, my name is James! Nice to meet you $user
 echo ==========================
 echo It is $date
 echo
-if [ "$sync" = "true" ] 
+if [ "$sync" = "true" ]
 	then 
 	echo Syncing...  
 	repo sync -$j
@@ -205,6 +186,7 @@ echo
 export USE_CCACHE=1 | tee -a james-build-log.txt
 echo >>james-build-log.txt
 prebuilt/linux-x86/ccache/ccache -M 50G | tee -a james-build-log.txt
+prebuilts/misc/linux-x86/ccache/ccache -M 50G | tee -a james-build-log.txt
 echo >>james-build-log.txt
 echo 
 clear
@@ -232,10 +214,10 @@ echo echo >>build.sh
 echo echo Found trees >>build.sh
 echo echo >>build.sh
 echo echo Lunching for $TARGET_PRODUCT >>build.sh
-echo lunch xmc_doubleshot-userdebug >>build.sh
+echo lunch $TARGET_PRODUCT-userdebug >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
-echo mka xmc -i >>build.sh
+echo make otapackage -j4 >>build.sh
 chmod +x build.sh
 ./build.sh | tee -a james-build-log.txt
 echo >>james-build-log.txt
@@ -245,10 +227,10 @@ echo >>james-build-log.txt
 echo
 echo Compiled
 sleep 2
-cd out/target/product/doubleshot
-if [ "$adminup" = "true" ] 
+cd out/target/product/$DEVICE
+if [ "$upload" = "true" ] 
 	then
-	echo Hello Admin, uploading $buildtype to $uploadurl
+	echo Hello $user, uploading $buildtype to $uploadurl
 	echo -----------------------------------------------
 	echo
 	wput -v $TARGET_PRODUCT-ota-eng.$user.zip $uploadurl  
