@@ -7,9 +7,9 @@
 # benefit or any other purpose without the permission of the developer.
 #
 ############################################################################
-AOKP_Buildbot
+James
 =============
-Built with C++ programming.
+Built with Bash programming.
 
 Local Buildbot I named James for building AOKP made from scratch 
 
@@ -19,7 +19,3 @@ Made for producing nightlies/builds of AOKP on to Goo.im
 How to run bash file:
 chmod +x James
 ./James
-
-How to run binary file:
-chmod a+x James.x
-sudo ./James.x
