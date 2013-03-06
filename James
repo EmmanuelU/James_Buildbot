@@ -1,10 +1,16 @@
 #!/bin/bash
+
 # parse options - credit aokp for idea
 clear
 if [ -f james-build-log.txt ]
   then
     echo "Previous log exists, deleting..."
     	rm james-build-log.txt
+clear
+fi
+if [ -f James~ ]
+  then
+    	rm James~
 clear
 fi
 command=
@@ -31,13 +37,8 @@ os=$(uname)
 user=$(whoami)
 java=$(type java)
 outdate=$(date +%m%d%y)
-url=http://dl.dropbox.com/u/40873980/pass.sh
 echo James v$ver was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
-wget -q $url
-chmod a+x pass.sh
-. pass.sh
-rm pass.sh
 while getopts ":c :h :s :u :n :r" opt
 do
     case "$opt" in
@@ -225,9 +226,13 @@ rm build.sh
 echo Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date >>james-build-log.txt
 echo >>james-build-log.txt
 echo
-echo Compiled
 sleep 2
 cd out/target/product/$DEVICE
+if [ ! -f $TARGET_PRODUCT-ota-eng.$user.zip ]
+  then
+    echo There was an error building ...
+    exit 1
+fi
 if [ "$upload" = "true" ] 
 	then
 	echo Hello $user, uploading $buildtype to $uploadurl
