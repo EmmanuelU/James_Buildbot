@@ -24,8 +24,8 @@ buildtype=
 uploadurl=
 host=upload.goo.im
 url=ftp://$admin:$pass@$host/public_html/Roms/
-nightly_path=Kang/Nightlies/
-stable_path=Kang/
+nightly_path=Kang/Nightlies/JellyKang_Nightly_$outdate.zip
+stable_path=Kang/JellyKang_v$romver.zip
 TARGET_PRODUCT=cm_doubleshot
 DEVICE=doubleshot
 COMPANY=htc
@@ -238,7 +238,7 @@ if [ "$upload" = "true" ]
 	echo Hello $user, uploading $buildtype to $uploadurl
 	echo -----------------------------------------------
 	echo
-	wput -v $TARGET_PRODUCT-ota-eng.$user.zip $uploadurl  
+	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl"
 	echo 
 	echo Done - Uploaded
 	exit 1
