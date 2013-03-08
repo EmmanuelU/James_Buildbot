@@ -31,7 +31,7 @@ DEVICE=doubleshot
 COMPANY=htc
 #END
 clean=
-j=j4
+j=j5
 date=$(date)
 os=$(uname)
 user=$(whoami)
@@ -39,7 +39,7 @@ java=$(type java)
 outdate=$(date +%m%d%y)
 echo James v$ver was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
-while getopts ":c :h :s :u :n :r" opt
+while getopts ":c :-h :-s :u :n :r" opt
 do
     case "$opt" in
         c) clean=true
@@ -218,7 +218,7 @@ echo echo Lunching for $TARGET_PRODUCT >>build.sh
 echo lunch $TARGET_PRODUCT-userdebug >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
-echo make otapackage -j4 >>build.sh
+echo make otapackage -$j >>build.sh
 chmod +x build.sh
 ./build.sh | tee -a james-build-log.txt
 echo >>james-build-log.txt
