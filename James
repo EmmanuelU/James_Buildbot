@@ -23,6 +23,7 @@ upload=
 buildtype=
 uploadurl=
 host=upload.goo.im
+outdate=$(date +%m%d%y)
 url=ftp://$admin:$pass@$host/public_html/Roms/
 nightly_path=Kang/Nightlies/JellyKang_Nightly_$outdate.zip
 stable_path=Kang/JellyKang_v$romver.zip
@@ -36,7 +37,6 @@ date=$(date)
 os=$(uname)
 user=$(whoami)
 java=$(type java)
-outdate=$(date +%m%d%y)
 echo James v$ver was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
 while getopts ":c :-h :-s :u :n :r" opt
