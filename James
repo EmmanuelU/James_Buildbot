@@ -196,10 +196,10 @@ echo >>james-build-log.txt
 echo $buildtype for $TARGET_PRODUCT
 echo =========
 sleep 2
-if [ "$clean" = "true" ] 
+if [ "$clean" = "true" ]
 	then 
 	echo Cleaning...  
-	make clobber -j$j
+	make clobber -$j
 fi  
 echo =========
 echo
