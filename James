@@ -144,6 +144,7 @@ echo command -v java >/dev/null 2>&1 || { echo >&2 "Java is not installed"; slee
 echo command -v repo >/dev/null 2>&1 || { echo >&2 "Repo binary is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v ccache >/dev/null 2>&1 || { echo >&2 "Ccache binary is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v make >/dev/null 2>&1 || { echo >&2 "Make is not installed"; sleep 2; exit 1;} >>app.sh
+echo command -v mka >/dev/null 2>&1 || { echo >&2 "Make is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v wget >/dev/null 2>&1 || { echo >&2 "wget is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v wput >/dev/null 2>&1 || { echo >&2 "wput is not installed"; sleep 2; exit 1;} >>app.sh
 chmod +x app.sh
@@ -186,8 +187,8 @@ echo >>james-build-log.txt
 echo 
 export USE_CCACHE=1 | tee -a james-build-log.txt
 echo >>james-build-log.txt
-prebuilt/linux-x86/ccache/ccache -M 50G | tee -a james-build-log.txt
-prebuilts/misc/linux-x86/ccache/ccache -M 50G | tee -a james-build-log.txt
+prebuilt/linux-x86/ccache/ccache -M 100G | tee -a james-build-log.txt
+prebuilts/misc/linux-x86/ccache/ccache -M 100G | tee -a james-build-log.txt
 echo >>james-build-log.txt
 echo 
 clear
@@ -198,7 +199,7 @@ sleep 2
 if [ "$clean" = "true" ] 
 	then 
 	echo Cleaning...  
-	make clean -$j
+	mka clobber
 fi  
 echo =========
 echo
@@ -218,7 +219,7 @@ echo echo Lunching for $TARGET_PRODUCT >>build.sh
 echo lunch $TARGET_PRODUCT-userdebug >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
-echo make otapackage -$j >>build.sh
+echo mka bacon >>build.sh
 chmod +x build.sh
 ./build.sh | tee -a james-build-log.txt
 echo >>james-build-log.txt
