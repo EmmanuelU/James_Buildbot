@@ -273,5 +273,5 @@ if [ "$shutdown" = "true" ]
 	echo $pass | sudo shutdown -S -h now
 	
 fi
-echo I am done with session, enjoy :) -James
+echo I am done with session, enjoy ":)" -James
 exit 1
