@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.2
+ver=3.2.1
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -28,7 +28,7 @@ admin=xmcwildchild22
 rom=JellyKang
 romver=1.0
 upload=
-buildtype=
+buildtype=Debug
 uploadurl=
 host=upload.goo.im
 url=ftp://$admin:$pass@$host/public_html/Roms/
@@ -70,10 +70,11 @@ do
         command=1
         ;;
 
-        h) echo ===James-Builder-v$ver===
+        h) echo ===-- James Builder v$ver --===
         echo
 	echo Usage: ./James -[OPTIONS]
-	echo          
+	echo        
+	echo  
 	echo Options: 
 	echo            
 	echo [-h] - Show this message
@@ -82,13 +83,14 @@ do
 	echo
 	echo [-c] - Clean the enviroment before building
 	echo
-	echo [-u] - Upload build to Server
-	echo	
-	echo 		[-n] - Upload a Nightly
-	echo	
-	echo		[-r] - Upload a Stable Release
-	echo
 	echo [-q] - Shutdown Computer after Build
+	echo
+	echo
+	echo Upload build to FTP Server:
+	echo	
+	echo [-un] - Upload a Nightly
+	echo	
+	echo [-ur] - Upload a Stable Release
 	echo
 	exit 1	
         ;;
@@ -179,6 +181,13 @@ sleep 2
 clear
 echo Running Start-up checks...
 sleep 1
+cd out/target/product/$DEVICE
+if [ -f $TARGET_PRODUCT-ota-eng.$user.zip ]
+  then
+    echo Deleting old rom ...
+    rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
+fi
+sleep 1
 echo 
 echo You are on $os
 echo $java
@@ -226,7 +235,7 @@ fi
 echo =========
 echo
 clear
-echo "Building $buildtype for $TARGET_PRODUCT..."
+echo "Building $buildtype for $TARGET_PRODUCT ..."
 echo "Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date" >>james-build-log.txt
 echo >>james-build-log.txt
 if [ -f build.sh ]
@@ -239,7 +248,7 @@ echo . build/envsetup.sh >>build.sh
 echo echo >>build.sh
 echo echo Found trees >>build.sh
 echo echo >>build.sh
-echo "echo Lunching for $TARGET_PRODUCT >>build.sh"
+echo "echo Lunching for $TARGET_PRODUCT" >>build.sh
 echo lunch $TARGET_PRODUCT-userdebug >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
@@ -271,5 +280,6 @@ if [ "$shutdown" = "true" ]
 	echo $pass | sudo shutdown -S -h now
 	
 fi
+echo
 echo I am done with session, enjoy ":)" -James
 exit 1
