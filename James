@@ -2,10 +2,10 @@
 
 # parse options - credit aokp for idea
 clear
-if [ -f james-build-log.txt ]
+if [ -f .james-build-log.txt ]
   then
     echo "Previous log exists, deleting..."
-    	rm james-build-log.txt
+    	rm .james-build-log.txt
 clear
 fi
 if [ -f James~ ]
@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.2.1
+ver=3.2.3
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -45,28 +45,28 @@ date=$(date)
 os=$(uname)
 user=$(whoami)
 java=$(type java)
-echo James v$ver was started --BEGIN LOG >>james-build-log.txt
-echo  >>james-build-log.txt
+echo James v$ver was started --BEGIN LOG >>.james-build-log.txt
+echo  >>.james-build-log.txt
 while getopts ":c :-h :-s :u :n :r :q" opt
 do
     case "$opt" in
         c) clean=true
 	   command=1
-	   echo clean=true >>james-build-log.txt
+	   echo clean=true >>.james-build-log.txt
         ;;
 
         s) sync=true
 	   command=1
-	   echo sync=true >>james-build-log.txt
+	   echo sync=true >>.james-build-log.txt
         ;;
 
         u) upload=true
-        echo upload=true >>james-build-log.txt
+        echo upload=true >>.james-build-log.txt
         command=1
         ;;
 
         q) shutdown=true
-        echo shutdown=true >>james-build-log.txt
+        echo shutdown=true >>.james-build-log.txt
         command=1
         ;;
 
@@ -114,7 +114,7 @@ do
 	fi    
 	command=1
 	buildtype=Nightly
-	echo buildtype=$buildtype >>james-build-log.txt 
+	echo buildtype=$buildtype >>.james-build-log.txt 
 	uploadurl=$url$nightly_path
         ;;
 
@@ -129,7 +129,7 @@ do
 	fi    
 	command=1
 	buildtype=Stable 
-	echo buildtype=$buildtype >>james-build-log.txt 
+	echo buildtype=$buildtype >>.james-build-log.txt 
 	uploadurl=$url$stable_path
         ;;
     esac
@@ -175,8 +175,8 @@ chmod +x app.sh
 ./app.sh
 rm app.sh
 echo 
-echo All required packages are installed | tee -a james-build-log.txt
-echo  >>james-build-log.txt
+echo All required packages are installed | tee -a .james-build-log.txt
+echo  >>.james-build-log.txt
 sleep 2
 clear
 echo Running Start-up checks...
@@ -197,8 +197,8 @@ sleep 3
 clear
 sleep 2
 clear
-echo Passed startup checks! >>james-build-log.txt
-echo  >>james-build-log.txt
+echo Passed startup checks! >>.james-build-log.txt
+echo  >>.james-build-log.txt
 echo ===James-Builder-v$ver===
 echo 
 echo Hello, my name is James! Nice to meet you $user
@@ -215,16 +215,16 @@ echo =========
 echo Setting up build enviroment...
 sleep 2
 echo 
-echo >>james-build-log.txt
+echo >>.james-build-log.txt
 echo 
-export USE_CCACHE=1 | tee -a james-build-log.txt
-echo >>james-build-log.txt
-prebuilt/linux-x86/ccache/ccache -M 100G | tee -a james-build-log.txt
-prebuilts/misc/linux-x86/ccache/ccache -M 100G | tee -a james-build-log.txt
-echo >>james-build-log.txt
+export USE_CCACHE=1 | tee -a .james-build-log.txt
+echo >>.james-build-log.txt
+prebuilt/linux-x86/ccache/ccache -M 100G | tee -a .james-build-log.txt
+prebuilts/misc/linux-x86/ccache/ccache -M 100G | tee -a .james-build-log.txt
+echo >>.james-build-log.txt
 echo 
 clear
-echo >>james-build-log.txt
+echo >>.james-build-log.txt
 echo "$buildtype for $TARGET_PRODUCT"
 echo =========
 sleep 2
@@ -237,27 +237,27 @@ echo =========
 echo
 clear
 echo "Building $buildtype for $TARGET_PRODUCT ..."
-echo "Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date" >>james-build-log.txt
-echo >>james-build-log.txt
-if [ -f build.sh ]
+echo "Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date" >>.james-build-log.txt
+echo >>.james-build-log.txt
+if [ -f .build.sh ]
   then
-    rm build.sh
+    rm .build.sh
 fi
-echo echo Locating trees... >>build.sh
-echo sleep 2 >>build.sh 
-echo . build/envsetup.sh >>build.sh
-echo echo >>build.sh
-echo echo Found trees >>build.sh
-echo echo >>build.sh
-echo "echo Lunching for $TARGET_PRODUCT" >>build.sh
-echo lunch $TARGET_PRODUCT-userdebug >>build.sh
-echo echo >>build.sh
-echo echo Compiling... >>build.sh
-echo mka bacon >>build.sh
-chmod +x build.sh
-./build.sh | tee -a james-build-log.txt
-echo >>james-build-log.txt
-rm build.sh
+echo echo Locating trees... >>.build.sh
+echo sleep 2 >>.build.sh 
+echo . build/envsetup.sh >>.build.sh
+echo echo >>.build.sh
+echo echo Found trees >>.build.sh
+echo echo >>.build.sh
+echo "echo Lunching for $TARGET_PRODUCT" >>.build.sh
+echo lunch $TARGET_PRODUCT-userdebug >>.build.sh
+echo echo >>.build.sh
+echo echo Compiling ... >>.build.sh
+echo mka bacon >>.build.sh
+chmod +x .build.sh
+./.build.sh | tee -a .james-build-log.txt
+echo >>.james-build-log.txt
+rm -rf .build.sh
 echo
 sleep 2
 cd out/target/product/$DEVICE
