@@ -14,31 +14,33 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.1
-romver=1.0
-#Configure to your own needs
-admin=xmcwildchild22
+ver=3.2
+# BEGIN Configure to your own needs
+
 # This should in your global bin folder and should echo your password
 # example contents of getjamespass file
 # 
 # echo yourpasswordhere
-#
-#
 pass=$(getjamespass)
+#
+#
+admin=xmcwildchild22
+rom=JellyKang
+romver=1.0
 upload=
 buildtype=
 uploadurl=
 host=upload.goo.im
-outdate=$(date +%m%d%y)
 url=ftp://$admin:$pass@$host/public_html/Roms/
-nightly_path=Kang/Nightlies/JellyKang_Nightly_$outdate.zip
-stable_path=Kang/JellyKang_v$romver.zip
+nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
+stable_path=Kang/"$rom"_v$romver.zip
 TARGET_PRODUCT=cm_doubleshot
 DEVICE=doubleshot
 COMPANY=htc
-#END
+# END
 clean=
 j=j5
+outdate=$(date +%m%d%y)
 date=$(date)
 os=$(uname)
 user=$(whoami)
@@ -92,6 +94,8 @@ do
         ;;
 
         \?)
+	     echo "Usage: ./James -[OPTIONS] or use ./James -h for help"
+	     echo
              echo "invalid option: -$OPTARG"
              exit 1
         ;;
@@ -119,7 +123,6 @@ do
 	fi
 	if [ "$buildtype" = "Nightly" ] ; then
 	echo You cannot use -n and -r together.
-	echo "invalid option: -$OPTARG"
 	exit 1
 	fi    
 	command=1
@@ -138,18 +141,13 @@ if [ "$buildtype" = "" ]
 		exit -1
 	fi
 fi
-if [ "$command" = "" ]
-	then
-	echo "Usage: ./James -[OPTIONS] or use ./James -h for help"
-	exit -1
-fi
 clear
 echo Running Start-up checks.
 sleep 1
 echo
 if [ ! -d "device/$COMPANY/$DEVICE" ]
   then
-    echo "No JellyKang build device directory found!"
+    echo "No $rom build device directory found!"
     	sleep 2
 		echo exiting...
 			sleep 1
@@ -157,7 +155,7 @@ if [ ! -d "device/$COMPANY/$DEVICE" ]
 fi
 if [ -d "device/$COMPANY/$DEVICE" ]
   then
-    echo "JellyKang build device directory found!"
+    echo "$rom build device directory found!"
     	sleep 2
 fi
 clear
@@ -197,7 +195,7 @@ echo Hello, my name is James! Nice to meet you $user
 echo ==========================
 echo It is $date
 echo
-if [ "$sync" = "true"]
+if [ "$sync" = "true" ]
 	then 
 	echo Syncing...  
 	repo sync -$j
@@ -229,6 +227,8 @@ echo =========
 echo
 clear
 echo "Building $buildtype for $TARGET_PRODUCT..."
+echo "Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date" >>james-build-log.txt
+echo >>james-build-log.txt
 if [ -f build.sh ]
   then
     rm build.sh
@@ -248,8 +248,6 @@ chmod +x build.sh
 ./build.sh | tee -a james-build-log.txt
 echo >>james-build-log.txt
 rm build.sh
-echo "Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date >>james-build-log.txt"
-echo >>james-build-log.txt
 echo
 sleep 2
 cd out/target/product/$DEVICE
