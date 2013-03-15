@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.0
+ver=3.1
 romver=1.0
 #Configure to your own needs
 admin=xmcwildchild22
@@ -98,7 +98,7 @@ do
 
         n)
 	if [ ! "$upload" = "true" ] ; then
-	echo You are not uploading so no need for -n or -s
+	echo "You are not uploading so no need for -n or -r"
 	exit 1
 	fi
 	if [ "$buildtype" = "Stable" ] ; then
@@ -112,9 +112,9 @@ do
 	uploadurl=$url$nightly_path
         ;;
 
-        s)
+        r)
 	if [ ! "$upload" = "true" ] ; then
-	echo You are not uploading so no need for -n or -s
+	echo "You are not uploading so no need for -n or -r"
 	exit 1
 	fi
 	if [ "$buildtype" = "Nightly" ] ; then
@@ -129,17 +129,20 @@ do
         ;;
     esac
 done
-if [ "$command" = "" ]
-	then
-	echo Usage: ./James -[OPTIONS] or use ./James -h for help
-	exit -1
-fi
 if [ "$buildtype" = "" ] 
 	then 
-        echo "You must specify a buildtype"
-	echo Use [-n] for Nightly or [-s] for Stable
+	if [ "$upload" = "true" ]
+	then
+		echo "You must specify a buildtype"
+		echo "Use [-n] for Nightly or [-r] for Stable release"
+		exit -1
+	fi
+fi
+if [ "$command" = "" ]
+	then
+	echo "Usage: ./James -[OPTIONS] or use ./James -h for help"
 	exit -1
-fi  
+fi
 clear
 echo Running Start-up checks.
 sleep 1
@@ -194,7 +197,7 @@ echo Hello, my name is James! Nice to meet you $user
 echo ==========================
 echo It is $date
 echo
-if [ "$sync" = "true" ]
+if [ "$sync" = "true"]
 	then 
 	echo Syncing...  
 	repo sync -$j
@@ -214,7 +217,7 @@ echo >>james-build-log.txt
 echo 
 clear
 echo >>james-build-log.txt
-echo $buildtype for $TARGET_PRODUCT
+echo "$buildtype for $TARGET_PRODUCT"
 echo =========
 sleep 2
 if [ "$clean" = "true" ]
@@ -225,7 +228,7 @@ fi
 echo =========
 echo
 clear
-echo Building $buildtype for $TARGET_PRODUCT...
+echo "Building $buildtype for $TARGET_PRODUCT..."
 if [ -f build.sh ]
   then
     rm build.sh
@@ -236,7 +239,7 @@ echo . build/envsetup.sh >>build.sh
 echo echo >>build.sh
 echo echo Found trees >>build.sh
 echo echo >>build.sh
-echo echo Lunching for $TARGET_PRODUCT >>build.sh
+echo "echo Lunching for $TARGET_PRODUCT >>build.sh"
 echo lunch $TARGET_PRODUCT-userdebug >>build.sh
 echo echo >>build.sh
 echo echo Compiling... >>build.sh
@@ -245,7 +248,7 @@ chmod +x build.sh
 ./build.sh | tee -a james-build-log.txt
 echo >>james-build-log.txt
 rm build.sh
-echo Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date >>james-build-log.txt
+echo "Building for $TARGET_PRODUCT on $TARGET_BUILD_VARIANT at $date >>james-build-log.txt"
 echo >>james-build-log.txt
 echo
 sleep 2
@@ -270,5 +273,5 @@ if [ "$shutdown" = "true" ]
 	echo $pass | sudo shutdown -S -h now
 	
 fi
-echo I'm done with session, enjoy :) -James
+echo I am done with session, enjoy :) -James
 exit 1
