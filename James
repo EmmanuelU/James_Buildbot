@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.2.3
+ver=3.4.1
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -30,6 +30,8 @@ romver=1.0
 upload=
 buildtype=Debug
 uploadurl=
+install=
+shutdown=
 host=upload.goo.im
 url=ftp://$admin:$pass@$host/public_html/Roms/
 nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
@@ -47,7 +49,7 @@ user=$(whoami)
 java=$(type java)
 echo James v$ver was started --BEGIN LOG >>.james-build-log.txt
 echo  >>.james-build-log.txt
-while getopts ":c :-h :-s :u :n :r :q" opt
+while getopts ":c :h :s :u :n :r :q :p" opt
 do
     case "$opt" in
         c) clean=true
@@ -70,6 +72,11 @@ do
         command=1
         ;;
 
+        p) install=true
+        echo install=true >>.james-build-log.txt
+        command=1
+        ;;
+
         h) echo ===-- James Builder v$ver --===
         echo
 	echo Usage: ./James -[OPTIONS]
@@ -84,6 +91,8 @@ do
 	echo [-c] - Clean the enviroment before building
 	echo
 	echo [-q] - Shutdown Computer after Build
+	echo
+	echo [-p] - Push Rom to Device after Build
 	echo
 	echo
 	echo Upload build to FTP Server:
@@ -165,6 +174,7 @@ echo Running Start-up checks..
 echo >>app.sh
 ## Will add download scripts for missing files later
 echo command -v java >/dev/null 2>&1 || { echo >&2 "Java is not installed"; sleep 2; exit 1;} >>app.sh
+echo command -v adb >/dev/null 2>&1 || { echo >&2 "Java is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v repo >/dev/null 2>&1 || { echo >&2 "Repo binary is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v ccache >/dev/null 2>&1 || { echo >&2 "Ccache binary is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v make >/dev/null 2>&1 || { echo >&2 "Make is not installed"; sleep 2; exit 1;} >>app.sh
@@ -199,9 +209,11 @@ sleep 2
 clear
 echo Passed startup checks! >>.james-build-log.txt
 echo  >>.james-build-log.txt
-echo ===James-Builder-v$ver===
+echo ===-- James Builder v$ver --===
 echo 
 echo Hello, my name is James! Nice to meet you $user
+echo
+echo I keep a log of all my actions in .james-build-log.txt
 echo ==========================
 echo It is $date
 echo
@@ -275,8 +287,20 @@ if [ "$upload" = "true" ]
 	echo 
 	echo Uploaded
 fi
+if [ "$install" = "true" ] 
+	then
+	echo
+	echo Pushing to device ...
+	adb wait-for-device
+	adb push -f $TARGET_PRODUCT-ota-eng.$user.zip /sdcard/
+	echo
+	echo Rebooting into Recovery ...
+	adb reboot recovery
+	
+fi
 if [ "$shutdown" = "true" ] 
 	then
+	echo	
 	echo Shutting Down ...
 	echo $pass | sudo shutdown -S -h now
 	
