@@ -14,11 +14,17 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=2.0
+ver=3.0
 romver=1.0
 #Configure to your own needs
 admin=xmcwildchild22
-pass=edude152
+# This should in your global bin folder and should echo your password
+# example contents of getjamespass file
+# 
+# echo yourpasswordhere
+#
+#
+pass=$(getjamespass)
 upload=
 buildtype=
 uploadurl=
@@ -39,7 +45,7 @@ user=$(whoami)
 java=$(type java)
 echo James v$ver was started --BEGIN LOG >>james-build-log.txt
 echo  >>james-build-log.txt
-while getopts ":c :-h :-s :u :n :r" opt
+while getopts ":c :-h :-s :u :n :r :q" opt
 do
     case "$opt" in
         c) clean=true
@@ -57,6 +63,11 @@ do
         command=1
         ;;
 
+        q) shutdown=true
+        echo shutdown=true >>james-build-log.txt
+        command=1
+        ;;
+
         h) echo ===James-Builder-v$ver===
         echo
 	echo Usage: ./James -[OPTIONS]
@@ -71,10 +82,12 @@ do
 	echo
 	echo [-u] - Upload build to Server
 	echo	
-	echo [-n] - Build a Nightly
+	echo 		[-n] - Upload a Nightly
 	echo	
-	echo [-r] - Build a Release
-	echo           
+	echo		[-r] - Upload a Stable Release
+	echo
+	echo [-q] - Shutdown Computer after Build
+	echo
 	exit 1	
         ;;
 
@@ -84,6 +97,10 @@ do
         ;;
 
         n)
+	if [ ! "$upload" = "true" ] ; then
+	echo You are not uploading so no need for -n or -s
+	exit 1
+	fi
 	if [ "$buildtype" = "Stable" ] ; then
 	echo You cannot use -n and -r together.
 	echo "invalid option: -$OPTARG"
@@ -96,6 +113,10 @@ do
         ;;
 
         s)
+	if [ ! "$upload" = "true" ] ; then
+	echo You are not uploading so no need for -n or -s
+	exit 1
+	fi
 	if [ "$buildtype" = "Nightly" ] ; then
 	echo You cannot use -n and -r together.
 	echo "invalid option: -$OPTARG"
@@ -241,8 +262,13 @@ if [ "$upload" = "true" ]
 	echo
 	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl"
 	echo 
-	echo Done - Uploaded
-	exit 1
+	echo Uploaded
 fi
-echo Done - Did not upload
+if [ "$shutdown" = "true" ] 
+	then
+	echo Shutting Down ...
+	echo $pass | sudo shutdown -S -h now
+	
+fi
+echo I'm done with session, enjoy :) -James
 exit 1
