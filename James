@@ -187,6 +187,7 @@ if [ -f $TARGET_PRODUCT-ota-eng.$user.zip ]
     echo Deleting old rom ...
     rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
 fi
+cd ../../../..
 sleep 1
 echo 
 echo You are on $os
