@@ -5,16 +5,16 @@ clear
 if [ -f .james-build-log.txt ]
   then
     echo "Previous log exists, deleting..."
-    	rm .james-build-log.txt
+    	rm -rf .james-build-log.txt
 clear
 fi
 if [ -f James~ ]
   then
-    	rm James~
+    	rm -rf James~
 clear
 fi
 command=
-ver=3.4.4
+ver=3.4.5
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -192,21 +192,12 @@ clear
 echo Running Start-up checks ...
 sleep 1
 cd out/target/product/$DEVICE
-if [ -f *.zip ]
-  then
-    echo Deleting old zips ...
-    rm -rf *.zip
-fi
-if [ -f *.md5 ]
-  then
-    echo Deleting old md5s ...
-    rm -rf *.md5
-fi
-if [ -f *.img ]
-  then
-    echo Deleting old imgs ...
-    rm -rf *.img
-fi
+echo
+echo Deleting old outfiles ...
+rm -rf *.zip
+rm -rf *.md5
+rm -rf *.md5sum
+rm -rf *.img
 cd ../../../..
 sleep 1
 echo 
