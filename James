@@ -153,7 +153,7 @@ if [ "$buildtype" = "" ]
 	fi
 fi
 clear
-echo Running Start-up checks.
+echo Running Start-up checks .
 sleep 1
 echo
 if [ ! -d "device/$COMPANY/$DEVICE" ]
@@ -170,7 +170,7 @@ if [ -d "device/$COMPANY/$DEVICE" ]
     	sleep 2
 fi
 clear
-echo Running Start-up checks..
+echo Running Start-up checks ..
 echo >>app.sh
 ## Will add download scripts for missing files later
 echo command -v java >/dev/null 2>&1 || { echo >&2 "Java is not installed"; sleep 2; exit 1;} >>app.sh
@@ -189,23 +189,23 @@ echo All required packages are installed | tee -a .james-build-log.txt
 echo  >>.james-build-log.txt
 sleep 2
 clear
-echo Running Start-up checks...
+echo Running Start-up checks ...
 sleep 1
 cd out/target/product/$DEVICE
 if [ -f *.zip ]
   then
     echo Deleting old zips ...
-    rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
+    rm -rf *.zip
 fi
 if [ -f *.md5 ]
   then
     echo Deleting old md5s ...
-    rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
+    rm -rf *.md5
 fi
 if [ -f *.img ]
   then
     echo Deleting old imgs ...
-    rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
+    rm -rf *.img
 fi
 cd ../../../..
 sleep 1
