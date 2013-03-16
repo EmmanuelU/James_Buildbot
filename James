@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.4.2
+ver=3.4.4
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -34,11 +34,11 @@ install=
 shutdown=
 host=upload.goo.im
 url=ftp://$admin:$pass@$host/public_html/Roms/
-nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
-stable_path=Kang/"$rom"_v$romver.zip
 TARGET_PRODUCT=cm_doubleshot
 DEVICE=doubleshot
 COMPANY=htc
+nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
+stable_path=Kang/"$rom"-"$DEVICE"_v$romver.zip
 # END
 clean=
 j=j5
@@ -192,9 +192,19 @@ clear
 echo Running Start-up checks...
 sleep 1
 cd out/target/product/$DEVICE
-if [ -f $TARGET_PRODUCT-ota-eng.$user.zip ]
+if [ -f *.zip ]
   then
-    echo Deleting old rom ...
+    echo Deleting old zips ...
+    rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
+fi
+if [ -f *.md5 ]
+  then
+    echo Deleting old md5s ...
+    rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
+fi
+if [ -f *.img ]
+  then
+    echo Deleting old imgs ...
     rm -rf $TARGET_PRODUCT-ota-eng.$user.zip
 fi
 cd ../../../..
@@ -290,7 +300,7 @@ fi
 if [ "$install" = "true" ] 
 	then
 	echo
-	echo Pushing to device ...
+	echo Pushing $TARGET_PRODUCT-ota-eng.$user.zip to /sdcard/ on device ...
 	adb wait-for-device
 	adb push $TARGET_PRODUCT-ota-eng.$user.zip /sdcard/
 	echo
