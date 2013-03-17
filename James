@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.4.5
+ver=3.4.6
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -26,7 +26,7 @@ pass=$(getjamespass)
 #
 admin=xmcwildchild22
 rom=JellyKang
-romver=1.0
+romver=1.1
 upload=
 buildtype=Debug
 uploadurl=
@@ -143,7 +143,7 @@ do
         ;;
     esac
 done
-if [ "$buildtype" = "" ] 
+if [ "$buildtype" = "Debug" ]
 	then 
 	if [ "$upload" = "true" ]
 	then
