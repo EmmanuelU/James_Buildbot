@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.4.6
+ver=3.4.7
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -112,7 +112,7 @@ do
         ;;
 
         n)
-	if [ ! "$upload" = "true" ] ; then
+	if [ "$upload" != "true" ] ; then
 	echo "You are not uploading so no need for -n or -r"
 	exit 1
 	fi
@@ -128,7 +128,7 @@ do
         ;;
 
         r)
-	if [ ! "$upload" = "true" ] ; then
+	if [ "$upload" != "true" ] ; then
 	echo "You are not uploading so no need for -n or -r"
 	exit 1
 	fi
