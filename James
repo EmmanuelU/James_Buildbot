@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.4.7
+ver=3.4.8
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -198,6 +198,8 @@ rm -rf *.zip
 rm -rf *.md5
 rm -rf *.md5sum
 rm -rf *.img
+rm -rf *.cpio
+rm -rf system/build.prop
 cd ../../../..
 sleep 1
 echo 
