@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.4.8
+ver=3.4.9
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -26,7 +26,7 @@ pass=$(getjamespass)
 #
 admin=xmcwildchild22
 rom=JellyKang
-romver=1.1
+romver=1.2
 upload=
 buildtype=Debug
 uploadurl=
@@ -281,18 +281,8 @@ if [ ! -f $TARGET_PRODUCT-ota-eng.$user.zip ]
     echo There was an error building ...
     exit 1
 fi
-if [ "$upload" = "true" ] 
+if [ "$install" = "true" ]
 	then
-	echo Hello $user, uploading $buildtype to $uploadurl
-	echo -----------------------------------------------
-	echo
-	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl"
-	echo 
-	echo Uploaded
-fi
-if [ "$install" = "true" ] 
-	then
-	echo
 	echo Pushing $TARGET_PRODUCT-ota-eng.$user.zip to /sdcard/ on device ...
 	adb wait-for-device
 	adb push $TARGET_PRODUCT-ota-eng.$user.zip /sdcard/
@@ -301,7 +291,17 @@ if [ "$install" = "true" ]
 	adb reboot recovery
 	
 fi
-if [ "$shutdown" = "true" ] 
+if [ "$upload" = "true" ]
+	then
+	echo
+	echo Hello $user, uploading $buildtype to $uploadurl
+	echo -----------------------------------------------
+	echo
+	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl"
+	echo 
+	echo Uploaded
+fi
+if [ "$shutdown" = "true" ]
 	then
 	echo	
 	echo Shutting Down ...
