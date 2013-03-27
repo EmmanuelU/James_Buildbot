@@ -194,6 +194,7 @@ sleep 1
 if [ -d "out/target/product/$DEVICE" ]
 	echo
 	echo Deleting old outfiles ...
+	cd out/target/product/$DEVICE	
 	rm -rf *.zip
 	rm -rf *.md5
 	rm -rf *.md5sum
