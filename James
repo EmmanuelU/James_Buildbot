@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.4.9
+ver=3.5.0
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -191,16 +191,17 @@ sleep 2
 clear
 echo Running Start-up checks ...
 sleep 1
-cd out/target/product/$DEVICE
-echo
-echo Deleting old outfiles ...
-rm -rf *.zip
-rm -rf *.md5
-rm -rf *.md5sum
-rm -rf *.img
-rm -rf *.cpio
-rm -rf system/build.prop
-cd ../../../..
+if [ -d "out/target/product/$DEVICE" ]
+	echo
+	echo Deleting old outfiles ...
+	rm -rf *.zip
+	rm -rf *.md5
+	rm -rf *.md5sum
+	rm -rf *.img
+	rm -rf *.cpio
+	rm -rf system/build.prop
+	cd ../../../..
+fi
 sleep 1
 echo 
 echo You are on $os
