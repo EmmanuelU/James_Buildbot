@@ -191,7 +191,7 @@ sleep 2
 clear
 echo Running Start-up checks ...
 sleep 1
-if [ -d "out/target/product/$DEVICE" ]
+if [ -d "out/target/product/$DEVICE" ] then
 	echo
 	echo Deleting old outfiles ...
 	cd out/target/product/$DEVICE	
