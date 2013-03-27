@@ -283,12 +283,13 @@ if [ ! -f $TARGET_PRODUCT-ota-eng.$user.zip ]
 fi
 if [ "$install" = "true" ]
 	then
-	echo Pushing $TARGET_PRODUCT-ota-eng.$user.zip to /sdcard/ on device ...
 	adb wait-for-device
-	adb push $TARGET_PRODUCT-ota-eng.$user.zip /sdcard/
-	echo
 	echo Rebooting into Recovery ...
 	adb reboot recovery
+	adb wait-for-device	
+	echo Pushing $TARGET_PRODUCT-ota-eng.$user.zip to /sdcard/ on device ...
+	adb push $TARGET_PRODUCT-ota-eng.$user.zip /sdcard/
+	echo
 	
 fi
 if [ "$upload" = "true" ]
