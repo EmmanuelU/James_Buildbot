@@ -26,7 +26,7 @@ pass=$(getjamespass)
 #
 admin=xmcwildchild22
 rom=JellyKang
-romver=1.5
+romver=1.6
 upload=
 buildtype=Debug
 uploadurl=
