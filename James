@@ -178,7 +178,7 @@ echo command -v adb >/dev/null 2>&1 || { echo >&2 "Java is not installed"; sleep
 echo command -v repo >/dev/null 2>&1 || { echo >&2 "Repo binary is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v ccache >/dev/null 2>&1 || { echo >&2 "Ccache binary is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v make >/dev/null 2>&1 || { echo >&2 "Make is not installed"; sleep 2; exit 1;} >>app.sh
-echo command -v mka >/dev/null 2>&1 || { echo >&2 "Make is not installed"; sleep 2; exit 1;} >>app.sh
+echo command -v mka >/dev/null 2>&1 || { echo >&2 "mka (make) is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v wget >/dev/null 2>&1 || { echo >&2 "wget is not installed"; sleep 2; exit 1;} >>app.sh
 echo command -v wput >/dev/null 2>&1 || { echo >&2 "wput is not installed"; sleep 2; exit 1;} >>app.sh
 chmod +x app.sh
@@ -226,7 +226,7 @@ echo
 if [ "$sync" = "true" ]
 	then 
 	echo Syncing...  
-	repo sync -$j
+	repo sync -$j | tee -a .james-build-log.txt
 fi  
 echo Type: $buildtype
 echo =========
@@ -249,7 +249,7 @@ sleep 2
 if [ "$clean" = "true" ]
 	then 
 	echo Cleaning...  
-	make clobber -$j
+	make clobber -$j | tee -a .james-build-log.txt
 fi  
 echo =========
 echo
