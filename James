@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.5.0
+ver=3.5.1
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -286,10 +286,15 @@ if [ ! -f $TARGET_PRODUCT-ota-eng.$user.zip ]
 fi
 if [ "$install" = "true" ]
 	then
+	echo "Waiting for Device ..."
 	adb wait-for-device
+	echo
+	echo Device Found ...
+	echo
 	echo Rebooting into Recovery ...
 	adb reboot recovery
-	sleep 15
+	sleep 17
+	echo
 	echo Pushing $TARGET_PRODUCT-ota-eng.$user.zip to /sdcard/ on device ...
 	adb push $TARGET_PRODUCT-ota-eng.$user.zip /sdcard/
 	echo
