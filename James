@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.5.1
+ver=3.5.2
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -32,9 +32,9 @@ buildtype=Debug
 uploadurl=
 install=
 shutdown=
+alternate=
 host=upload.goo.im
 url=ftp://$admin:$pass@$host/public_html/Roms/
-TARGET_PRODUCT=cm_doubleshot
 DEVICE=doubleshot
 COMPANY=htc
 nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
@@ -49,7 +49,7 @@ user=$(whoami)
 java=$(type java)
 echo James v$ver was started --BEGIN LOG >>.james-build-log.txt
 echo  >>.james-build-log.txt
-while getopts ":c :h :s :u :n :r :q :p" opt
+while getopts ":c :h :s :u :n :r :q :p :a" opt
 do
     case "$opt" in
         c) clean=true
@@ -77,6 +77,11 @@ do
         command=1
         ;;
 
+        a) alternate=true
+        echo alternate=true >>.james-build-log.txt
+        command=1
+        ;;
+
         h) echo ===-- James Builder v$ver --===
         echo
 	echo Usage: ./James -[OPTIONS]
@@ -93,6 +98,8 @@ do
 	echo [-q] - Shutdown Computer after Build
 	echo
 	echo [-p] - Push Rom to Device after Build
+	echo
+	echo [-a] - Use Alternative Device naming
 	echo
 	echo
 	echo Upload build to FTP Server:
@@ -151,6 +158,11 @@ if [ "$buildtype" = "Debug" ]
 		echo "Use [-n] for Nightly or [-r] for Stable release"
 		exit -1
 	fi
+fi
+TARGET_PRODUCT=cm_doubleshot
+if [ "$alternate" = "true" ]
+then
+	TARGET_PRODUCT=slim_doubleshot
 fi
 clear
 echo Running Start-up checks .
