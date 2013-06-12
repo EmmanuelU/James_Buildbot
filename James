@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.5.2
+ver=3.6.0
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -28,13 +28,18 @@ admin=xmcwildchild22
 rom=JellyKang
 romver=1.7
 upload=
+upload2=
 buildtype=Debug
 uploadurl=
+uploadurl2=
 install=
 shutdown=
 alternate=
+script=mka
 host=upload.goo.im
-url=ftp://$admin:$pass@$host/public_html/Roms/
+host2=ftp.rootfiles.org
+url=ftp://$admin:"$pass"@$host/public_html/Roms/
+url2=ftp://$admin:"K#GF-dgczh!}Xd]P{0"@$host2/pub/mirror/xmcwildchild22/Roms/
 DEVICE=doubleshot
 COMPANY=htc
 nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
@@ -104,6 +109,8 @@ do
 	echo
 	echo Upload build to FTP Server:
 	echo	
+	echo [-ub] - Also Upload to Mirror 	
+	echo	
 	echo [-un] - Upload a Nightly
 	echo	
 	echo [-ur] - Upload a Stable Release
@@ -132,6 +139,12 @@ do
 	buildtype=Nightly
 	echo buildtype=$buildtype >>.james-build-log.txt 
 	uploadurl=$url$nightly_path
+	uploadurl2=$url2$nightly_path
+        ;;
+
+        b) upload2=true
+	   command=1
+	   echo upload2=true >>.james-build-log.txt
         ;;
 
         r)
@@ -147,6 +160,7 @@ do
 	buildtype=Stable 
 	echo buildtype=$buildtype >>.james-build-log.txt 
 	uploadurl=$url$stable_path
+	uploadurl2=$url2$stable_path
         ;;
     esac
 done
@@ -163,6 +177,7 @@ TARGET_PRODUCT=cm_doubleshot
 if [ "$alternate" = "true" ]
 then
 	TARGET_PRODUCT=slim_doubleshot
+	script=make
 fi
 clear
 echo Running Start-up checks .
@@ -283,7 +298,7 @@ echo "echo Lunching for $TARGET_PRODUCT" >>.build.sh
 echo lunch $TARGET_PRODUCT-userdebug >>.build.sh
 echo echo >>.build.sh
 echo echo Compiling ... >>.build.sh
-echo mka bacon >>.build.sh
+echo $script bacon >>.build.sh
 chmod +x .build.sh
 ./.build.sh | tee -a .james-build-log.txt
 echo >>.james-build-log.txt
@@ -320,7 +335,17 @@ if [ "$upload" = "true" ]
 	echo
 	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl"
 	echo 
-	echo Uploaded
+	echo Uploaded 1st Zip
+fi
+if [ "$upload2" = "true" ]
+	then
+	echo
+	echo Hello $user, uploading $buildtype to $uploadurl
+	echo -----------------------------------------------
+	echo
+	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl2"
+	echo 
+	echo Uploaded 2nd Zip
 fi
 if [ "$shutdown" = "true" ]
 	then
