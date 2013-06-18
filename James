@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.6.2
+ver=3.6.3
 clean=
 j=j5
 outdate=$(date +%m%d%y)
@@ -22,6 +22,7 @@ date=$(date)
 os=$(uname)
 user=$(whoami)
 java=$(type java)
+md5=
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -356,6 +357,10 @@ if [ "$shutdown" = "true" ]
 	echo $pass | sudo shutdown -S -h now
 	
 fi
+md5=$(md5sum $TARGET_PRODUCT-ota-eng.$user.zip | awk '{ print $1 }')
+md5=
+echo MD5 of $TARGET_PRODUCT-ota-eng.$user.zip is:
+echo $md5
 echo
 echo I am done with session, enjoy ":)" -James
 exit 1
