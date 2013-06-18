@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.6.0
+ver=3.6.1
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -54,7 +54,7 @@ user=$(whoami)
 java=$(type java)
 echo James v$ver was started --BEGIN LOG >>.james-build-log.txt
 echo  >>.james-build-log.txt
-while getopts ":c :h :s :u :n :r :q :p :a" opt
+while getopts ":c :h :s :u :n :r :q :p :a :b" opt
 do
     case "$opt" in
         c) clean=true
@@ -69,6 +69,11 @@ do
 
         u) upload=true
         echo upload=true >>.james-build-log.txt
+        command=1
+        ;;
+
+        b) upload2=true
+        echo upload2=true >>.james-build-log.txt
         command=1
         ;;
 
@@ -115,6 +120,8 @@ do
 	echo	
 	echo [-ur] - Upload a Stable Release
 	echo
+	echo Example: ./James -scunb
+	echo
 	exit 1	
         ;;
 
@@ -140,11 +147,6 @@ do
 	echo buildtype=$buildtype >>.james-build-log.txt 
 	uploadurl=$url$nightly_path
 	uploadurl2=$url2$nightly_path
-        ;;
-
-        b) upload2=true
-	   command=1
-	   echo upload2=true >>.james-build-log.txt
         ;;
 
         r)
