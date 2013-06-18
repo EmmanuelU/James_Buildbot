@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.6.3
+ver=3.6.4
 clean=
 j=j5
 outdate=$(date +%m%d%y)
@@ -138,7 +138,7 @@ do
 	echo "You are not uploading so no need for -n or -r"
 	exit 1
 	fi
-	if [ "$buildtype" = "Stable" ] ; then
+	if [ "$buildtype" = "Release" ] ; then
 	echo You cannot use -n and -r together.
 	echo "invalid option: -$OPTARG"
 	exit 1
@@ -160,7 +160,7 @@ do
 	exit 1
 	fi    
 	command=1
-	buildtype=Stable 
+	buildtype=Release 
 	echo buildtype=$buildtype >>.james-build-log.txt 
 	uploadurl=$url$stable_path
 	uploadurl2=$url2$stable_path
@@ -199,6 +199,11 @@ if [ -d "device/$COMPANY/$DEVICE" ]
     echo "$rom build device directory found!"
     	sleep 2
 fi
+if [ ! -d "vendor/james" ]
+  then
+    mkdir vendor/james
+fi
+echo "PRODUCT_PROPERTY_OVERRIDES += ro.kang.type=$buildtype" > vendor/james/James.mk
 clear
 echo Running Start-up checks ..
 echo >>app.sh
@@ -343,7 +348,7 @@ fi
 if [ "$upload2" = "true" ]
 	then
 	echo
-	echo Hello $user, uploading $buildtype to $uploadurl
+	echo Hello $user, uploading $buildtype to $uploadurl2
 	echo -----------------------------------------------
 	echo
 	wput -v $TARGET_PRODUCT-ota-eng.$user.zip "$uploadurl2"
@@ -358,7 +363,6 @@ if [ "$shutdown" = "true" ]
 	
 fi
 md5=$(md5sum $TARGET_PRODUCT-ota-eng.$user.zip | awk '{ print $1 }')
-md5=
 echo MD5 of $TARGET_PRODUCT-ota-eng.$user.zip is:
 echo $md5
 echo
