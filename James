@@ -14,7 +14,14 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.6.1
+ver=3.6.2
+clean=
+j=j5
+outdate=$(date +%m%d%y)
+date=$(date)
+os=$(uname)
+user=$(whoami)
+java=$(type java)
 # BEGIN Configure to your own needs
 
 # This should in your global bin folder and should echo your password
@@ -26,7 +33,7 @@ pass=$(getjamespass)
 #
 admin=xmcwildchild22
 rom=JellyKang
-romver=1.7
+romver=1.8
 upload=
 upload2=
 buildtype=Debug
@@ -45,13 +52,6 @@ COMPANY=htc
 nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
 stable_path=Kang/"$rom"-"$DEVICE"_v$romver.zip
 # END
-clean=
-j=j5
-outdate=$(date +%m%d%y)
-date=$(date)
-os=$(uname)
-user=$(whoami)
-java=$(type java)
 echo James v$ver was started --BEGIN LOG >>.james-build-log.txt
 echo  >>.james-build-log.txt
 while getopts ":c :h :s :u :n :r :q :p :a :b" opt
