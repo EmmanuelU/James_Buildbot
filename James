@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.6.4
+ver=3.6.5
 clean=
 j=j5
 outdate=$(date +%m%d%y)
@@ -319,6 +319,9 @@ if [ ! -f $TARGET_PRODUCT-ota-eng.$user.zip ]
     echo There was an error building ...
     exit 1
 fi
+md5=$(md5sum $TARGET_PRODUCT-ota-eng.$user.zip | awk '{ print $1 }')
+echo $TARGET_PRODUCT-ota-eng.$user.zip MD5: $md5
+echo
 if [ "$install" = "true" ]
 	then
 	echo "Waiting for Device ..."
@@ -362,7 +365,7 @@ if [ "$shutdown" = "true" ]
 	echo $pass | sudo shutdown -S -h now
 	
 fi
-md5=$(md5sum $TARGET_PRODUCT-ota-eng.$user.zip | awk '{ print $1 }')
+echo
 echo $TARGET_PRODUCT-ota-eng.$user.zip MD5: $md5
 echo
 echo I am done with session, enjoy ":)" -James
