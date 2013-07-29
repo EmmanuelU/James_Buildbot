@@ -14,7 +14,7 @@ if [ -f James~ ]
 clear
 fi
 command=
-ver=3.6.5
+ver=3.6.6
 clean=
 j=j5
 outdate=$(date +%m%d%y)
@@ -34,7 +34,7 @@ pass=$(getjamespass)
 #
 admin=xmcwildchild22
 rom=JellyKang
-romver=1.9
+romver=2.0
 upload=
 upload2=
 buildtype=Debug
