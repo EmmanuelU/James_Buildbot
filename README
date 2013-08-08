@@ -9,13 +9,13 @@
 ############################################################################
 James
 =============
-Built with Bash programming.
+Built with C programming.
 
 Local Buildbot I named James for building Android made from scratch 
 
 Built by Emmanuel Utomi (Xmc Wildchild22)
-Made for producing nightlies/builds of AOKP on to Goo.im
+Made for producing nightlies/builds of Android on to any FTP Account
 
-How to run bash file:
-chmod +x James
+How to run program:
+./compiler
 ./James -[OPTIONS]
