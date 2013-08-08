@@ -1,0 +1,3 @@
+#!/bin/bash
+rm -rf James
+gcc James.c -o James
