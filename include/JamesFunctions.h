@@ -1,68 +1,93 @@
-bool clean = false,
-	syncdir = false,
-	shutdown = false,
-	push = false;
+typedef struct James {
+	
+	bool clean;
+	bool syncdir;
+	bool shutdown;
+	bool push;
+	char* args;
+	int upload;
+	int device;
+	char* devicename;
 
-int upload = 0;
-int device = 0;
+} James;
+
+James Compiler;
 
 void PrintHelp(){
 	ClearPrints();
 	PrintTextWithVar("James BuildBot v", james_version, ":");
 	PrintText("Usage: ./James -[OPTIONS]"); 
-	SkipLine();
+	LineSkip();
 	PrintText("Options:"); 
-	SkipLine();
+	LineSkip();
 	PrintText("[-h] - Show this message");
-	SkipLine();
+	LineSkip();
 	PrintText("[-s] - Sync the repo before building");
-	SkipLine();
+	LineSkip();
 	PrintText("[-c] - Clean the enviroment before building");
-	SkipLine();
+	LineSkip();
 	PrintText("[-q] - Shutdown Computer after Build");
-	SkipLine();
+	LineSkip();
 	PrintText("[-p] - Push Rom to Device after Build");
-	SkipLine();
-	SkipLine();
+	LineSkip();
+	LineSkip();
 	PrintText("Device Naming:");	
-	SkipLine();
+	LineSkip();
 	PrintText("	[-d1] - CyanogenMod");
-	SkipLine();
+	LineSkip();
 	PrintText("	[-d2] - AOKP");
-	SkipLine();
+	LineSkip();
 	PrintText("	[-d3] - Evervolv");
-	SkipLine();
+	LineSkip();
 	PrintText("	[-d4] - Slim Roms");
-	SkipLine();
+	LineSkip();
 	PrintText("	[-d5] - CarbonDev");
-	SkipLine();
-	SkipLine();
+	LineSkip();
+	LineSkip();
 	PrintText("Upload build to FTP Server:");	
-	SkipLine();
+	LineSkip();
 	PrintText("	[-u1] - Upload a Nightly");
-	SkipLine();
+	LineSkip();
 	PrintText("	[-u2] - Upload a Stable Release");
-	SkipLine();
-	PrintText("Example: ./James -s -c -u1 -d3");
-	SkipLine();
+	LineSkip();
+	LineSkip("Example: ./James -s -c -u1 -d3");
+	LineSkip();
 	return;
 }
 
 void PrintArgs(){
 	ClearPrints();
-	PrintTextWithVar("James BuildBot v", james_version, ":");
-	SkipLine();
-	PrintTextWithVar("Sync Repo: ", syncdir, "");
-	SkipLine();
-	PrintTextWithVar("Clean Repo: ", clean, "");
-	SkipLine();
-	PrintTextWithVar("Shutdown after Completion: ", shutdown, "");
-	SkipLine();
-	PrintTextWithVar("Push to Device after Completion: ", push, "");
-	SkipLine();
-	PrintTextWithVar("Device Selection: ", device, "");
-	SkipLine();
-	PrintTextWithVar("Upload Selection: ", upload, "");
-	SkipLine();
+	PrintTextWithVar("James BuildBot v", james_version, " Build Info:");
+	LineSkip();
+	PrintTextWithVar("Syncing Repo: ", Compiler.syncdir, "");
+	LineSkip();
+	PrintTextWithVar("Cleaning Repo: ", Compiler.clean, "");
+	LineSkip();
+	PrintTextWithVar("Shutdown after Compilation: ", Compiler.shutdown, "");
+	LineSkip();
+	PrintTextWithVar("Push to Device after Compilation: ", Compiler.push, "");
+	LineSkip();
+	PrintTextWithVar("Device Style Selection: ", Compiler.device, "");
+	LineSkip();
+	PrintTextWithString("Device Product: ", Compiler.devicename, "");
+	LineSkip();
+	PrintTextWithVar("Uploading: ", Compiler.upload, "");
+	LineSkip();
 	return;
+}
+
+void CompileRom(){
+	ClearPrints();
+	if(!DoesDirExist("build")){
+		PrintText("No Build directory found!");
+		quit();
+	}
+	system("bash build/envsetup.sh");
+	text = CombineStrings("lunch ", Compiler.devicename);
+	text = CombineStrings(text, "-userdebug");
+	PrintText(text);
+	system(text);
+	system("make otapackage -j8");
+	sleep(WAIT);
+
 }
