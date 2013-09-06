@@ -17,5 +17,5 @@ Built by Emmanuel Utomi (Xmc Wildchild22)
 Made for producing nightlies/builds of Android on to any FTP Account
 
 How to run program:
-./compiler
+make -j#
 ./James -[OPTIONS]
