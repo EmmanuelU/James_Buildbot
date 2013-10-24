@@ -25,9 +25,13 @@ rom=$JAMES_ROM
 romver=$JAMES_VERSION
 pass=$JAMES_NETPASS
 command=
-ver=3.8
+ver=3.8.1
 clean=
-j=j5
+j=$JAMES_BUILDJOBS
+if [ "$JAMES_BUILDJOBS" = "" ]
+then
+	j=j5
+fi
 outdate=$(date +%m%d%y)
 date=$(date)
 os=$(uname)
@@ -244,7 +248,7 @@ echo
 if [ "$sync" = "true" ]
 	then 
 	echo Syncing...  
-	repo sync -$j | tee -a .james-build-log.txt
+	repo sync -$j -f | tee -a .james-build-log.txt
 fi  
 echo Type: $buildtype
 echo =========
