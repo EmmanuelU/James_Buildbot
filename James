@@ -13,8 +13,19 @@ if [ -f James~ ]
     	rm -rf James~
 clear
 fi
+. James.conf
+if [ "$JAMES_ROM" = "" ]
+then
+	clear
+	echo James: Rom not defined.
+	echo
+	exit 1
+fi
+rom=$JAMES_ROM 
+romver=$JAMES_VERSION
+pass=$JAMES_NETPASS
 command=
-ver=3.6.6
+ver=3.8
 clean=
 j=j5
 outdate=$(date +%m%d%y)
@@ -23,35 +34,20 @@ os=$(uname)
 user=$(whoami)
 java=$(type java)
 md5=
-# BEGIN Configure to your own needs
-
-# This should in your global bin folder and should echo your password
-# example contents of getjamespass file
-# 
-# echo yourpasswordhere
-pass=$(getjamespass)
-#
-#
-admin=xmcwildchild22
-rom=JellyKang
-romver=1.9.5
+admin=$JAMES_NETUSER
 upload=
-upload2=
 buildtype=Debug
-uploadurl=
-uploadurl2=
+TARGET_PRODUCT=$JAMES_PRODUCT
+uploadurl=$JAMES_NETPATH
 install=
 shutdown=
-alternate=
-script=mka
-host=upload.goo.im
-host2=ftp.rootfiles.org
-url=ftp://$admin:"$pass"@$host/public_html/Roms/
-url2=ftp://$admin:"K#GF-dgczh!}Xd]P{0"@$host2/pub/mirror/xmcwildchild22/Roms/
-DEVICE=doubleshot
-COMPANY=htc
-nightly_path=Kang/Nightlies/"$rom"_Nightly_$outdate.zip
-stable_path=Kang/"$rom"-"$DEVICE"_v$romver.zip
+script=$JAMES_BUILDSCRIPT
+host=$JAMES_NETHOST
+url=$JAMES_NETPATH
+DEVICE=$JAMES_DEVICE
+COMPANY=$JAMES_DEVICE_COMPANY
+nightly_path=$JAMES_ROM_SHORT/Nightlies/"$rom"_Nightly_$outdate.zip
+stable_path=$JAMES_ROM_SHORT/"$rom"-"$DEVICE"_v$romver.zip
 # END
 echo James v$ver was started --BEGIN LOG >>.james-build-log.txt
 echo  >>.james-build-log.txt
@@ -70,11 +66,6 @@ do
 
         u) upload=true
         echo upload=true >>.james-build-log.txt
-        command=1
-        ;;
-
-        b) upload2=true
-        echo upload2=true >>.james-build-log.txt
         command=1
         ;;
 
@@ -114,8 +105,6 @@ do
 	echo
 	echo
 	echo Upload build to FTP Server:
-	echo	
-	echo [-ub] - Also Upload to Mirror 	
 	echo	
 	echo [-un] - Upload a Nightly
 	echo	
@@ -175,12 +164,6 @@ if [ "$buildtype" = "Debug" ]
 		echo "Use [-n] for Nightly or [-r] for Stable release"
 		exit -1
 	fi
-fi
-TARGET_PRODUCT=cm_doubleshot
-if [ "$alternate" = "true" ]
-then
-	TARGET_PRODUCT=slim_doubleshot
-	script=make
 fi
 clear
 echo Running Start-up checks .
