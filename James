@@ -25,7 +25,7 @@ rom=$JAMES_ROM
 romver=$JAMES_VERSION
 pass=$JAMES_NETPASS
 command=
-ver=3.8.1
+ver=3.8.2
 clean=
 j=$JAMES_BUILDJOBS
 if [ "$JAMES_BUILDJOBS" = "" ]
@@ -249,7 +249,11 @@ if [ "$sync" = "true" ]
 	then 
 	echo Syncing...  
 	repo sync -$j -f | tee -a .james-build-log.txt
+	. James.conf
+	rom=$JAMES_ROM 
+	romver=$JAMES_VERSION
 fi  
+clear
 echo Type: $buildtype
 echo =========
 echo Setting up build enviroment...
